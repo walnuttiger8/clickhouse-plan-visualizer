@@ -1,0 +1,19 @@
+[project]
+name = "clickhouse-plan-visualizer"
+version = "0.1.0"
+description = "ClickHouse explain plan visualization service"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi[standard]>=0.115.12",
+    "graphviz>=0.20.3",
+    "jinja2>=3.1.6",
+    "mypy>=1.16.0",
+    "pydantic>=2.11.5",
+    "python-multipart>=0.0.20",
+    "ruff>=0.11.13",
+]
+
+[[tool.mypy.overrides]]
+module = ["graphviz"]
+follow_untyped_imports = true

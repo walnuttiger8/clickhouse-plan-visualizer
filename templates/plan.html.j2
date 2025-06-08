@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="graph"></div>
+
+
+<script type="text/plain" id="graph_source">
+{{ graph_source|safe }}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@viz-js/viz@3.12.0/lib/viz-standalone.min.js"></script>
+<script>
+    Viz.instance().then(function (viz) {
+        var graphSource = document.getElementById("graph_source").innerHTML;
+
+        var svg = viz.renderSVGElement(graphSource);
+
+        document.getElementById("graph").appendChild(svg);
+    });
+</script>
+</body>
+</html>
