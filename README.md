@@ -39,4 +39,8 @@ fastapi dev src/main.py
 
 2. Open your web browser and navigate to `http://localhost:8000`
 
+![index_page](docs/images/index_page.png)
+
 3. Submit your ClickHouse EXPLAIN output in the web interface to visualize the query plan
+
+![plan_visualization](docs/images/plan_visualization.png)
