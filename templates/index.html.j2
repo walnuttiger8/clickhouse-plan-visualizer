@@ -2,16 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Plan visualizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickHouse Plan Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold text-gray-900">ClickHouse Plan Visualizer</h1>
+            <p class="mt-2 text-sm text-gray-600">Visualize your ClickHouse query execution plans with ease</p>
+        </div>
+    </header>
 
-<form action="{{ url_for('render_plan') }}" method="post">
-    <label for="plan">plan</label>
-    <textarea name="plan" id="plan"></textarea>
+    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        {% if error %}
+        <div class="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                        {{ error }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
-    <button type="submit">Submit</button>
-</form>
+        <div class="bg-white shadow rounded-lg p-6">
+            <form action="{{ url_for('render_plan') }}" method="post" class="space-y-6">
+                <div>
+                    <label for="plan" class="block text-sm font-medium text-gray-700">Query Execution Plan</label>
+                    <div class="mt-1">
+                        <textarea
+                            name="plan"
+                            id="plan"
+                            rows="10"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md {% if error %}border-red-300{% endif %}"
+                            placeholder="Paste your ClickHouse EXPLAIN output here..."
+                            required
+                        ></textarea>
+                    </div>
+                </div>
 
+                <div class="flex items-center justify-end">
+                    <button
+                        type="submit"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Visualize Plan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
 </body>
 </html>

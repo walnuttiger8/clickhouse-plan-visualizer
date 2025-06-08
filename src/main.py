@@ -1,7 +1,7 @@
 import json
 from typing import Annotated
 
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -20,13 +20,40 @@ def index(request: Request) -> HTMLResponse:
 
 @app.post("/render-plan")
 def render_plan(plan: Annotated[str, Form()], request: Request) -> HTMLResponse:
-    parsed_plan = json.loads(plan)
+    try:
+        parsed_plan = json.loads(plan)
+    except json.JSONDecodeError:
+        return templates.TemplateResponse(
+            name="index.html.j2",
+            request=request,
+            context={"error": "Invalid JSON format. Please check your plan data."}
+        )
 
-    plan_root = query_plan.Plan.model_validate(parsed_plan[0])
+    try:
+        if not parsed_plan or not isinstance(parsed_plan, list) or len(parsed_plan) == 0:
+            return templates.TemplateResponse(
+                name="index.html.j2",
+                request=request,
+                context={"error": "Plan data is empty or invalid. Please provide a valid plan."}
+            )
 
-    visitor = graphviz_visitor.GraphvizVisitor()
+        plan_root = query_plan.Plan.model_validate(parsed_plan[0])
+    except Exception as e:
+        return templates.TemplateResponse(
+            name="index.html.j2",
+            request=request,
+            context={"error": f"Failed to parse plan: {str(e)}"}
+        )
 
-    plan_root.plan.accept(visitor)
+    try:
+        visitor = graphviz_visitor.GraphvizVisitor()
+        plan_root.plan.accept(visitor)
+    except Exception as e:
+        return templates.TemplateResponse(
+            name="index.html.j2",
+            request=request,
+            context={"error": f"Failed to generate visualization: {str(e)}"}
+        )
 
     return templates.TemplateResponse(
         name="plan.html.j2",
