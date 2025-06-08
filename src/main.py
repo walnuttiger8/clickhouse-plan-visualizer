@@ -1,3 +1,4 @@
+import os
 import json
 from typing import Annotated
 
@@ -10,7 +11,8 @@ import query_plan
 
 app = fastapi.FastAPI()
 
-templates = fastapi_templating.Jinja2Templates(directory="templates")
+templates_dir = os.path.join(os.path.dirname(__file__), "templates")
+templates = fastapi_templating.Jinja2Templates(directory=templates_dir)
 
 
 @app.get("/")
