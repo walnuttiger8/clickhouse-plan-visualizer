@@ -1,25 +1,25 @@
 import json
 from typing import Annotated
 
-from fastapi import FastAPI, Form, Request, HTTPException
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+import fastapi
+from fastapi import responses as fastapi_responses
+from fastapi import templating as fastapi_templating
 
 import graphviz_visitor
 import query_plan
 
-app = FastAPI()
+app = fastapi.FastAPI()
 
-templates = Jinja2Templates(directory="templates")
+templates = fastapi_templating.Jinja2Templates(directory="templates")
 
 
 @app.get("/")
-def index(request: Request) -> HTMLResponse:
+def index(request: fastapi.Request) -> fastapi_responses.HTMLResponse:
     return templates.TemplateResponse(name="index.html.j2", request=request)
 
 
 @app.post("/render-plan")
-def render_plan(plan: Annotated[str, Form()], request: Request) -> HTMLResponse:
+def render_plan(plan: Annotated[str, fastapi.Form()], request: fastapi.Request) -> fastapi_responses.HTMLResponse:
     try:
         parsed_plan = json.loads(plan)
     except json.JSONDecodeError:
