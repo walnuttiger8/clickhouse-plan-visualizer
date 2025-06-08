@@ -30,6 +30,20 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`
 pip install -e .
 ```
 
+## Running with Docker Compose
+
+1. Build and start the service:
+```bash
+docker compose up --build
+```
+
+2. Open your web browser and navigate to `http://localhost:8000`
+
+To stop the service, press `Ctrl+C` in the terminal or run:
+```bash
+docker compose down
+```
+
 ## Usage
 
 1. Start the web service:
