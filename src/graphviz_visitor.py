@@ -39,6 +39,15 @@ class GraphvizVisitor(PlanNodeVisitor[str]):
     def visit_filter(self, node: "PlanNode") -> str:
         return self._default_visit(node)
 
+    def visit_window(self, node: "PlanNode") -> str:
+        return self._default_visit(node)
+
+    def visit_sorting(self, node: "PlanNode") -> str:
+        return self._default_visit(node)
+
+    def visit_aggregating(self, node: "PlanNode") -> str:
+        return self._default_visit(node)
+
     def _default_visit(self, node: "PlanNode") -> str:
         description = str(node.description)
 

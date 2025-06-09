@@ -31,6 +31,15 @@ class PlanNodeVisitor(abc.ABC, t.Generic[T]):
     @abc.abstractmethod
     def visit_filter(self, node: "PlanNode") -> T: ...
 
+    @abc.abstractmethod
+    def visit_window(self, node: "PlanNode") -> T: ...
+
+    @abc.abstractmethod
+    def visit_sorting(self, node: "PlanNode") -> T: ...
+
+    @abc.abstractmethod
+    def visit_aggregating(self, node: "PlanNode") -> T: ...
+
 
 class BaseNode(BaseModel):
     class Config:
@@ -76,6 +85,12 @@ class PlanNode(BaseNode):
             return visitor.visit_read_from_storage(self)
         elif self.node_type == "Filter":
             return visitor.visit_filter(self)
+        elif self.node_type == "Window":
+            return visitor.visit_window(self)
+        elif self.node_type == "Sorting":
+            return visitor.visit_sorting(self)
+        elif self.node_type == "Aggregating":
+            return visitor.visit_aggregating(self)
         else:
             raise NotImplementedError(
                 f"accept not implemented for node_type={self.node_type}"
